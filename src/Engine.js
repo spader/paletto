@@ -20,5 +20,9 @@ var Engine = function () {
         return board[i][j];
     };
 
+    this.getColor = function (color) {
+        return colors[color];
+    };
+
     init();
 };
