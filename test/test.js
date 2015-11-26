@@ -44,3 +44,18 @@ PalettoTestCase.prototype.testStory4 = function () {
     engine.play('F6');
     assertEquals(engine.getScorePlayer(1, 'black'), 2);
 };
+
+PalettoTestCase.prototype.testStory5 = function () {
+    var engine = new Engine();
+
+    // Change the first board with a board more advanced
+    engine.secondBoard();
+
+    assertTrue(engine.isAllowed('D1'));
+    assertTrue(engine.isAllowed('F1'));
+    assertTrue(engine.isAllowed('E3'));
+    assertTrue(engine.isAllowed('A4'));
+    assertTrue(engine.isAllowed('B5'));
+    assertTrue(engine.isAllowed('C6'));
+    assertFalse(engine.isAllowed('C3'));
+};
