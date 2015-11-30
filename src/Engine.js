@@ -25,6 +25,17 @@ var Engine = function () {
         ];
     };
 
+    this.secondBoard = function () {
+        board = [
+            [colors.none, colors.none, colors.none, colors.blue, colors.red, colors.white],
+            [colors.none, colors.none, colors.none, colors.red, colors.yellow, colors.none],
+            [colors.none, colors.none, colors.blue, colors.white, colors.black, colors.none],
+            [colors.red, colors.black, colors.red, colors.none, colors.none, colors.none],
+            [colors.none, colors.green, colors.yellow, colors.none, colors.none, colors.none],
+            [colors.none, colors.none, colors.black, colors.none, colors.none, colors.none]
+        ];
+    };
+
     var convertCoords = function (c) {
         var line = c.charCodeAt(1) - 49;
         var column = c.charCodeAt(0) - 65;
@@ -101,15 +112,65 @@ var Engine = function () {
         }
     };
 
-    this.changeTurn = function () {
-        if (player == 0)
-            player = 1
-        else
-            player = 0
+    var neighborPositions = function (l, c) {
+        var verticalPosition = '';
+        var horizontalPosition = '';
+
+        if (goToUp(l, c))
+            verticalPosition += 'u';
+
+        if (goToDown(l, c))
+            verticalPosition += 'd';
+
+        if (goToLeft(l, c))
+            horizontalPosition += 'l';
+
+        if (goToRight(l, c))
+            horizontalPosition += 'r';
+
+        return (verticalPosition + horizontalPosition);
     };
 
-    this.play = function (c) {
-        choose(convertCoords(c));
+    var checkPositions = function (p, l, c) {
+        var check = null;
+
+        if (p == 'ur') {
+            return board[l - 1][c + 1] != colors.none;
+        }
+        if (p == 'ul') {
+            return board[l - 1][c - 1] != colors.none;
+        }
+
+        if (check != null) {
+            return check;
+        }
+
+        if (p == 'dr') {
+            return board[l + 1][c + 1] != colors.none;
+        }
+        return board[l + 1][c - 1] != colors.none;
+    };
+
+    var verifyGame = function (lin, col) {
+        var positions = neighborPositions(lin, col);
+
+        if (positions === 'ud' || positions === 'lr') {
+            return false;
+        }
+
+        return checkPositions(positions, lin, col);
+    };
+
+    this.changeTurn = function () {
+        if (player == 0)
+            player = 1;
+        else
+            player = 0;
+    };
+
+    this.play = function (coords) {
+        if (this.isAllowed(coords))
+            choose(convertCoords(coords));
     };
 
     this.getCase = function(i, j) {
@@ -139,6 +200,19 @@ var Engine = function () {
         }
 
         return possibleColors;
+    };
+
+    this.isAllowed = function (coords) {
+        var cCoords = convertCoords(coords);
+        var neighbours = countNeighbor(cCoords.lin, cCoords.col);
+
+        if (neighbours >= 3)
+            return false;
+
+        if (neighbours == 2)
+            return verifyGame(cCoords.lin, cCoords.col);
+
+        return true;
     };
 
     init();
