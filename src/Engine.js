@@ -25,17 +25,6 @@ var Engine = function () {
         ];
     };
 
-    this.secondBoard = function () {
-        board = [
-            [colors.none, colors.none, colors.none, colors.blue, colors.red, colors.white],
-            [colors.none, colors.none, colors.none, colors.red, colors.yellow, colors.none],
-            [colors.none, colors.none, colors.blue, colors.white, colors.black, colors.none],
-            [colors.red, colors.black, colors.red, colors.none, colors.none, colors.none],
-            [colors.none, colors.green, colors.yellow, colors.none, colors.none, colors.none],
-            [colors.none, colors.none, colors.black, colors.none, colors.none, colors.none]
-        ];
-    };
-
     var convertCoords = function (c) {
         var line = c.charCodeAt(1) - 49;
         var column = c.charCodeAt(0) - 65;
@@ -112,65 +101,6 @@ var Engine = function () {
         }
     };
 
-    var neighborPositions = function (l, c) {
-        var horizontalPosition = '';
-        var verticalPosition = '';
-
-        if (goToUp(l, c))
-            verticalPosition += 'u';
-
-        if (goToDown(l, c))
-            verticalPosition += 'd';
-
-        if (goToLeft(l, c))
-            horizontalPosition += 'l';
-
-        if (goToRight(l, c))
-            horizontalPosition += 'r';
-
-        return (horizontalPosition + verticalPosition);
-    };
-
-    var checkPositions = function (p, l, c) {
-        var check = null;
-
-        if (p == 'ur')
-            check = board[l - 1][c + 1] != colors.none;
-
-        if (p == 'ul')
-            check = board[l - 1][c - 1] != colors.none;
-
-        if (check != null)
-            return check;
-
-        if (p == 'dr')
-            return board[l + 1][c + 1] != colors.none;
-
-        return board[l + 1][c - 1] != colors.none;
-    };
-
-    var verifyGame = function (l, c) {
-        var positions = neighborPositions(l, c);
-
-        if (positions == 'ud' || positions == 'lr')
-            return false;
-
-        return checkPositions(positions, l, c);
-    };
-
-    this.isAllowed = function (coords) {
-        var cCoords = convertCoords(coords);
-        var neighbours = countNeighbor(cCoords.l, cCoords.c);
-
-        if (neighbours >= 3)
-            return false;
-
-        if (neighbours == 2)
-            return verifyGame(cCoords.l, cCoords.c);
-
-        return true;
-    };
-
     this.changeTurn = function () {
         if (player == 0)
             player = 1
@@ -179,8 +109,7 @@ var Engine = function () {
     };
 
     this.play = function (c) {
-        if (this.isAllowed(c))
-            choose(convertCoords(c));
+        choose(convertCoords(c));
     };
 
     this.getCase = function(i, j) {
