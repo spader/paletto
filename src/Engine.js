@@ -176,7 +176,7 @@ var Engine = function () {
         verifyScoreHaveWinner();
 
         if (!winner)
-            if (balls == 0)
+            if (pieces == 0)
                 winner = player;
     };
 
