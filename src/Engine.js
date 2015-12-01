@@ -5,7 +5,8 @@ var Engine = function () {
         colors,
         pieces = 36,
         players,
-        player;
+        player,
+        winner;
 
     var init = function () {
         players = [
@@ -13,6 +14,7 @@ var Engine = function () {
             {black: 0, green: 0, white: 0, blue: 0, red: 0, yellow: 0}
         ];
         player = 0;
+        winner = false;
 
         colors = {none: 0, black: 1, green: 2, white: 3, blue: 4, red: 5, yellow: 6};
         board = [
@@ -161,6 +163,15 @@ var Engine = function () {
         return checkPositions(positions, lin, col);
     };
 
+    var haveWinner = function () {
+        var color;
+
+        for (color in players[player])
+            if (players[player][color] == 6)
+                winner = player;
+        return;
+    };
+
     this.changeTurn = function () {
         if (player == 0)
             player = 1;
@@ -171,6 +182,8 @@ var Engine = function () {
     this.play = function (coords) {
         if (this.isAllowed(coords))
             choose(convertCoords(coords));
+
+        haveWinner();
     };
 
     this.getCase = function(i, j) {
@@ -213,6 +226,10 @@ var Engine = function () {
             return verifyGame(cCoords.lin, cCoords.col);
 
         return true;
+    };
+
+    this.getWinner = function () {
+        return winner;
     };
 
     init();
