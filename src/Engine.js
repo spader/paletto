@@ -163,13 +163,21 @@ var Engine = function () {
         return checkPositions(positions, lin, col);
     };
 
-    var haveWinner = function () {
+    var verifyScoreHaveWinner = function () {
         var color;
 
         for (color in players[player])
             if (players[player][color] == 6)
                 winner = player;
         return;
+    };
+
+    var haveWinner = function () {
+        verifyScoreHaveWinner();
+
+        if (!winner)
+            if (balls == 0)
+                winner = player;
     };
 
     this.changeTurn = function () {
